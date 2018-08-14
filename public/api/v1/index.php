@@ -401,7 +401,17 @@ function echo_main_dashboard_JSON($project_instance, $date)
     $num_selected_subprojects = 0;
     $filter_on_labels = false;
     $share_label_filters = false;
+    $filters = [];
     foreach ($filterdata['filters'] as $filter) {
+        if (array_key_exists('filters', $filter)) {
+            foreach ($filter['filters'] as $subfilter) {
+                $filters[] = $subfilter;
+            }
+        } else {
+            $filters[] = $filter;
+        }
+    }
+    foreach ($filters as $filter) {
         if ($filter['field'] == 'subprojects') {
             if ($filter['compare'] == 92) {
                 $excluded_subprojects[] = $filter['value'];
@@ -412,6 +422,7 @@ function echo_main_dashboard_JSON($project_instance, $date)
             $filter_on_labels = true;
         }
     }
+    unset($filters);
     if ($filter_on_labels && $project_instance->ShareLabelFilters) {
         $share_label_filters = true;
         $response['sharelabelfilters'] = true;
@@ -1621,9 +1632,17 @@ function get_child_builds_hyperlink($parentid, $filterdata)
     $n = 0;
     $count = count($filterdata['filters']);
     $num_includes = 0;
-    for ($i = 0; $i < $count; $i++) {
-        $filter = $filterdata['filters'][$i];
-
+    $filters = [];
+    foreach ($filterdata['filters'] as $filter) {
+        if (array_key_exists('filters', $filter)) {
+            foreach ($filter['filters'] as $subfilter) {
+                $filters[] = $subfilter;
+            }
+        } else {
+            $filters[] = $filter;
+        }
+    }
+    foreach ($filters as $filter) {
         if ($filter['field'] == 'subprojects') {
             // If we're filtering subprojects at the parent-level
             // convert that to the appropriate filter for the child-level.
