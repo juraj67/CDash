@@ -6,7 +6,6 @@
         <span ng-if="!cdash.user.id || cdash.user.id == 0">Login</span>
       </a>
       <a href="index.php">All Dashboards</a>
-      <ng-include ng-if="cdash.user.id > 0" src="'build/views/partials/logout_@@version.html'"></ng-include>
     </div>
 
     <div id="datetime"> {{::cdash.datetime}} </div>

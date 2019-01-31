@@ -63,10 +63,10 @@ echo json_encode(cast_data_for_JSON($response));
 
 function chart_for_buildProperties($Project, $begin, $end)
 {
-    if (!isset($_SESSION['defecttypes'])) {
+    if (!Session::has('defecttypes')) {
         json_error_response('No defecttypes defined in your session');
     }
-    $defect_types = $_SESSION['defecttypes'];
+    $defect_types = Session::get('defecttypes');
 
     // Construct an SQL SELECT clause for the requested types of defects.
     $defect_keys = [];

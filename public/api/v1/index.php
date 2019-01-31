@@ -445,13 +445,14 @@ if (!function_exists('echo_main_dashboard_JSON')) {
 
         // If the user is logged in we display if the build has some changes for him
         $userupdatesql = '';
-        if (isset($_SESSION['cdash']) && array_key_exists('loginid', $_SESSION['cdash'])) {
+        $userid = Auth::id();
+        if ($userid) {
             $userupdatesql = "(SELECT count(updatefile.updateid) FROM updatefile,build2update,user2project,
             user2repository
                 WHERE build2update.buildid=b.id
                 AND build2update.updateid=updatefile.updateid
                 AND user2project.projectid=b.projectid
-                AND user2project.userid='" . $_SESSION['cdash']['loginid'] . "'
+                AND user2project.userid='{$userid}'
                 AND user2repository.userid=user2project.userid
                 AND (user2repository.projectid=0 OR user2repository.projectid=b.projectid)
                 AND user2repository.credential=updatefile.author) AS userupdates,";
